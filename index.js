@@ -26,11 +26,39 @@ async function run() {
 
         const toys = client.db("legoDB").collection("toys");
 
+
+        // post toys
         app.post('/toys',async(req,res)=>{
             const newToy = req.body;
             console.log(newToy);
+            
             const result = await toys.insertOne(newToy);
             res.send(result);
+        })
+
+        // update toy
+        app.put('/toys/:id',async(req,res)=>{
+            const id = req.params.id;
+            const updatedToy = req.body;
+            console.log(id,updatedToy);
+            const filter={_id: new ObjectId(id)}
+            const updatedTOY = {
+                $set: {
+                    toyname : updatedToy.toy_name,
+                    price: updatedToy.price, 
+                    quantity: updatedToy.quantity, 
+                    rating: updatedToy.rating, 
+                    seller: updatedToy.seller, 
+                    seller_mail: updatedToy.seller_mail, 
+                    sub_category: updatedToy.sub_category, 
+                    img: updatedToy.img, 
+                    description: updatedToy.description 
+                }
+            }
+            const result = await toys.updateOne(filter,updatedTOY);
+            console.log(result);
+            res.send(result);
+
         })
 
 
@@ -67,7 +95,6 @@ run().catch(console.dir);
 app.use(cors());
 app.use(express.json());
 
-console.log(process.env.DB_USER, process.env.DB_PASS);
 
 app.get('/', (req, res) => {
     res.send('lego server running')
