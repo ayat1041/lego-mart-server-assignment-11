@@ -39,7 +39,7 @@ async function run() {
                     const result = await toys.find().limit(20).toArray();
                     res.send(result);
                 })
-        
+                //get toys by id
                 app.get('/toy/:id', async(req,res)=>{
                     const id = req.params.id;
                     const query = {_id: new ObjectId(id)}
@@ -56,7 +56,7 @@ async function run() {
             res.send(result);
         })
 
-        // update toy
+        // updated toy
         app.put('/toys/:id',async(req,res)=>{
             const id = req.params.id;
             const updatedToy = req.body;
