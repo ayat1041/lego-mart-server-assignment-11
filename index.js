@@ -26,6 +26,27 @@ async function run() {
 
         const toys = client.db("legoDB").collection("toys");
 
+                // getting all toys and users toys
+                app.get('/toys', async (req, res) => {
+                    let query = {};
+                    if (req.query?.email) {
+                        query = { seller_mail: req.query.email };
+                    }
+                    const result = await toys.find(query).toArray();
+                    res.send(result);
+                })
+                app.get('/alltoys', async (req, res) => {
+                    const result = await toys.find().limit(20).toArray();
+                    res.send(result);
+                })
+        
+                app.get('/toy/:id', async(req,res)=>{
+                    const id = req.params.id;
+                    const query = {_id: new ObjectId(id)}
+                    const toy = await toys.findOne(query);
+                    res.send(toy);
+                })
+        
 
         // post toys
         app.post('/toys',async(req,res)=>{
@@ -68,27 +89,6 @@ async function run() {
             const query = {_id: new ObjectId(id)}
             const result = await toys.deleteOne(query);
             res.send(result);
-        })
-
-        // getting all toys and users toys
-        app.get('/toys', async (req, res) => {
-            let query = {};
-            if (req.query?.email) {
-                query = { seller_mail: req.query.email };
-            }
-            const result = await toys.find(query).toArray();
-            res.send(result);
-        })
-        app.get('/alltoys', async (req, res) => {
-            const result = await toys.find().limit(20).toArray();
-            res.send(result);
-        })
-
-        app.get('/toy/:id', async(req,res)=>{
-            const id = req.params.id;
-            const query = {_id: new ObjectId(id)}
-            const toy = await toys.findOne(query);
-            res.send(toy);
         })
 
     } finally {
