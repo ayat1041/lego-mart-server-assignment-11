@@ -26,6 +26,14 @@ async function run() {
 
         const toys = client.db("legoDB").collection("toys");
 
+        app.post('/toys',async(req,res)=>{
+            const newToy = req.body;
+            console.log(newToy);
+            const result = await toys.insertOne(newToy);
+            res.send(result);
+        })
+
+
         // getting all toys and users toys
         app.get('/toys', async (req, res) => {
             let query = {};
@@ -33,6 +41,10 @@ async function run() {
                 query = { seller_mail: req.query.email };
             }
             const result = await toys.find(query).toArray();
+            res.send(result);
+        })
+        app.get('/alltoys', async (req, res) => {
+            const result = await toys.find().limit(20).toArray();
             res.send(result);
         })
 
