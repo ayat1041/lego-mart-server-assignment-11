@@ -51,7 +51,6 @@ async function run() {
         // post toys
         app.post('/toys',async(req,res)=>{
             const newToy = req.body;
-            console.log(newToy);
             
             const result = await toys.insertOne(newToy);
             res.send(result);
@@ -61,7 +60,6 @@ async function run() {
         app.put('/toys/:id',async(req,res)=>{
             const id = req.params.id;
             const updatedToy = req.body;
-            console.log(id,updatedToy);
             const filter={_id: new ObjectId(id)}
             const updatedTOY = {
                 $set: {
@@ -78,7 +76,6 @@ async function run() {
             }
 
             const result = await toys.updateOne(filter,updatedTOY);
-            console.log(result);
             res.send(result);
 
         })
